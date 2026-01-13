@@ -4,4 +4,4 @@ api = NinjaAPI(title="Merentalbe API", version="1.0.0")
 
 @api.get("/hello")
 def hello(request):
-    return {"message": "Hello, Merental!"}
+    return {"message": "World Tukang Merental!"}
