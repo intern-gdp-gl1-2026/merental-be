@@ -1,0 +1,110 @@
+openapi: 3.0.3
+info:
+  title: MeRental API
+  version: 1.0.0
+  description: An API Contract for MeRental Project.
+servers:
+  - url: http://localhost:8000
+    description: Local server
+
+tags:
+  - name: PingPong
+    description: Ping and Pong endpoints
+
+paths:
+  /ping:
+    get:
+      tags: [PingPong]
+      summary: Ping the service
+      description: Returns "pong" to confirm the service is reachable.
+      operationId: ping
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PingResponse"
+              examples:
+                ok:
+                  value:
+                    message: pong
+                    timestamp: "2026-01-13T14:00:00+07:00"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /pong:
+    get:
+      tags: [PingPong]
+      summary: Pong the service
+      description: Returns "ping" as the reverse response.
+      operationId: pong
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PongResponse"
+              examples:
+                ok:
+                  value:
+                    message: ping
+                    timestamp: "2026-01-13T14:00:00+07:00"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  schemas:
+    PingResponse:
+      type: object
+      additionalProperties: false
+      required: [message, timestamp]
+      properties:
+        message:
+          type: string
+          example: pong
+        timestamp:
+          type: string
+          format: date-time
+
+    PongResponse:
+      type: object
+      additionalProperties: false
+      required: [message, timestamp]
+      properties:
+        message:
+          type: string
+          example: ping
+        timestamp:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      additionalProperties: false
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          example: INTERNAL_ERROR
+        message:
+          type: string
+          example: Unexpected error occurred
+        details:
+          type: object
+          additionalProperties: true
+          description: Extra debugging details
+
+  responses:
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            err:
+              value:
+                code: INTERNAL_ERROR
+                message: Unexpected error occurred
